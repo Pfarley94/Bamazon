@@ -12,6 +12,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
+  console.log("Let'shop")
   displayItems();
 });
 
@@ -38,6 +39,7 @@ function whatProduct() {
       var query = "SELECT product_name, stock_quantity FROM products WHERE item_id = ?"
       connection.query(query, [answer.id], function (err, results) {
         console.log(results)
+        console.log(answer.id)
         howMany();
       });
 
@@ -45,7 +47,7 @@ function whatProduct() {
 };
 
 // // 2nd inquirer prompt: ask how many units of the product they would like to buy
-function howMany(whatProduct) {
+function howMany() {
   inquirer
     .prompt({
       name: "quantity",
@@ -53,18 +55,18 @@ function howMany(whatProduct) {
       message: "how many would you like to purchase?"
     })
     .then(function (answer) {
-      if (answer.quantity > answer.id)
-        console.log("insufficent quantity");
-      else {
-        console.log("ooo")
-      }
+        var query = "SELECT stock_quantity FROM products WHERE item_id = ?"
+        connection.query(query, [answer.quantity], function (err, results, fields) {
+     results.forEach((element, index) => {
+      let name  = element.stock_quantity;
+       });
+       console.log(answer.quantity);
+       placeOrder()
     });
-
-}
+  });
+};
 // customer places order
-  // function placeOrder(){
-  //   "SELECT stock_quantity FROM products" - answer
-  // };
+ 
 // if not enough product to meet request log "insufficent quantity", cancel request.
 
 //else update databae and show customer total cost. 
